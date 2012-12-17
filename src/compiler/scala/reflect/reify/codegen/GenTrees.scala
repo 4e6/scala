@@ -211,11 +211,6 @@ trait GenTrees {
             val res = mirrorCall(nme.Select, reify(qual), reify(name))
             if (reifyDebug) println(s"result: $res")
             res
-          case Select(qual, name) if qual.isType =>
-            if (reifyDebug) println(s"qualifier is a type: reify as SelectFromTypeTree($qual, $name)")
-            val res = mirrorCall(nme.SelectFromTypeTree, reify(qual), reify(name))
-            if (reifyDebug) println(s"result: $res")
-            res
           case SelectFromTypeTree(qual, name) =>
             if (reifyDebug) println(s"reify as is: SelectFromTypeTree($qual, $name)")
             val res = mirrorCall(nme.SelectFromTypeTree, reify(qual), reify(name))
