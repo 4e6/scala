@@ -201,11 +201,6 @@ trait GenTrees {
           }
         }
         else tree match {
-          case Select(qual @ This(n), name) =>
-            if (reifyDebug)	println(s"reifying Select(This($n), $name)")
-            val res = mirrorCall(nme.Select, mirrorBuildCall(nme.This, reify(qual.symbol)), reify(name))
-            if (reifyDebug) println(s"result: $res")
-            res
           case Select(qual, name) if qual.isTerm && !qual.symbol.isPackage && qual.symbol != definitions.PredefModule =>
             if (reifyDebug) println(s"qualifier is a term: reify as Select($qual, $name)")
             val res = mirrorCall(nme.Select, reify(qual), reify(name))
