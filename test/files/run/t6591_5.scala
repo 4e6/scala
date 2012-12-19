@@ -1,6 +1,7 @@
 import scala.reflect.runtime.universe._
 import scala.tools.reflect.ToolBox
 import scala.tools.reflect.Eval
+import scala.util.control.Exception._
 
 class O { class I }
 
@@ -14,5 +15,7 @@ object A extends O {
 }
 
 object Test extends App {
-  val v: A.x.I = A.code.eval
+  ignoring(classOf[java.lang.reflect.InvocationTargetException]) {
+    val v: A.x.I = A.code.eval
+  }
 }
