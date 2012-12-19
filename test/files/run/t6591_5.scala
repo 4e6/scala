@@ -1,7 +1,7 @@
 import scala.reflect.runtime.universe._
 import scala.tools.reflect.ToolBox
 import scala.tools.reflect.Eval
-import scala.util.control.Exception._
+import java.lang.reflect.InvocationTargetException
 
 class O { class I }
 
@@ -15,7 +15,9 @@ object A extends O {
 }
 
 object Test extends App {
-  ignoring(classOf[java.lang.reflect.InvocationTargetException]) {
+  try {
     val v: A.x.I = A.code.eval
+  } catch {
+    case ex: InvocationTargetException if ex.getCause.isInstanceOf[NotImplementedError] =>
   }
 }
