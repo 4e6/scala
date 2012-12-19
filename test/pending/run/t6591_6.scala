@@ -2,7 +2,7 @@ import scala.language.existentials
 import scala.reflect.runtime.universe._
 import scala.tools.reflect.ToolBox
 import scala.tools.reflect.Eval
-import scala.util.control.Exception._
+import java.lang.reflect.InvocationTargetException
 
 class O { class I }
 
@@ -17,8 +17,9 @@ class A extends O {
 
 object Test extends App {
   type T = a.x.I forSome { val a: A }
-  ignoring(classOf[java.lang.reflect.InvocationTargetException]) {
-    //val v: a.x.I forSome { val a: A } = (new A).code.eval //type mismatch
-    val v: T = (new A).code.eval //compiles fine
+  try {
+    val v: T = (new A).code.eval
+  } catch {
+    case ex: InvocationTargetException if ex.getCause.isInstanceOf[NotImplementedError] =>
   }
 }
