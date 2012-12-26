@@ -89,7 +89,10 @@ abstract class TreeInfo {
     case Select(Literal(const), name) =>
       const.isAnyVal && (const.tpe.member(name) != NoSymbol)
     case Select(qual, _) =>
-      tree.symbol.isStable && isExprSafeToInline(qual)
+      if (qual.symbol != null && (qual.symbol.name endsWith nme.REIFY_FREE_VALUE_SUFFIX))
+        isExprSafeToInline(qual)
+      else
+        tree.symbol.isStable && isExprSafeToInline(qual)
     case TypeApply(fn, _) =>
       isExprSafeToInline(fn)
     case Apply(fn, List()) =>
