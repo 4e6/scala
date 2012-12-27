@@ -89,12 +89,12 @@ abstract class TreeInfo {
     case Select(Literal(const), name) =>
       const.isAnyVal && (const.tpe.member(name) != NoSymbol)
     case Select(qual, _) =>
-      if (qual.symbol != null && (qual.symbol.name endsWith nme.REIFY_FREE_VALUE_SUFFIX))
-        isExprSafeToInline(qual)
-      else
-        tree.symbol.isStable && isExprSafeToInline(qual)
+      tree.symbol.isStable && isExprSafeToInline(qual)
     case TypeApply(fn, _) =>
       isExprSafeToInline(fn)
+    // special case for reified free vals
+    case Apply(Select(free @ Ident(_), nme.apply), _) if free.symbol.name endsWith nme.REIFY_FREE_VALUE_SUFFIX =>
+      isExprSafeToInline(free)
     case Apply(fn, List()) =>
       /* Note: After uncurry, field accesses are represented as Apply(getter, Nil),
        * so an Apply can also be pure.
