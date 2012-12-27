@@ -210,7 +210,7 @@ abstract class ToolBoxFactory[U <: JavaUniverse](val u: U) { factorySelf =>
           val meth = obj.moduleClass.newMethod(newTermName(wrapperMethodName))
           def makeParam(schema: (FreeTermSymbol, TermName)) = {
             val (fv, name) = schema
-            meth.newValueParameter(name) setInfo appliedType(definitions.FunctionClass(0).tpe, List(fv.tpe.resultType))
+            meth.newValueParameter(name, newFlags = if (fv.isStable) Flags.STABLE else 0) setInfo appliedType(definitions.FunctionClass(0).tpe, List(fv.tpe.resultType))
           }
           meth setInfo MethodType(freeTerms.map(makeParam).toList, AnyClass.tpe)
           minfo.decls enter meth
@@ -232,7 +232,8 @@ abstract class ToolBoxFactory[U <: JavaUniverse](val u: U) { factorySelf =>
                   NoPosition))
           trace("wrapped: ")(showAttributed(moduledef, true, true, settings.Yshowsymkinds.value))
 
-          val cleanedUp = resetLocalAttrs(moduledef)
+          var cleanedUp = resetLocalAttrs(moduledef, _.hasSymbolWhich(meth==))
+
           trace("cleaned up: ")(showAttributed(cleanedUp, true, true, settings.Yshowsymkinds.value))
           cleanedUp.asInstanceOf[ModuleDef]
         }
@@ -410,4 +411,3 @@ abstract class ToolBoxFactory[U <: JavaUniverse](val u: U) { factorySelf =>
     def eval(tree: u.Tree): Any = compile(tree)()
   }
 }
-
