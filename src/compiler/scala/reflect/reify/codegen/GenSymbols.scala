@@ -104,7 +104,7 @@ trait GenSymbols {
         val capturedBinding = referenceCapturedVariable(sym)
         Reification(name, capturedBinding, mirrorBuildCall(nme.newFreeTerm, reify(sym.name.toString), capturedBinding, mirrorBuildCall(nme.flagsFromBits, reify(sym.flags)), reify(origin(sym))))
       } else {
-        Reification(name, binding, mirrorBuildCall(nme.newFreeTerm, reify(sym.name.toString), binding, mirrorBuildCall(nme.flagsFromBits, reify(sym.flags | reflect.internal.Flags.STABLE)), reify(origin(sym))))
+        Reification(name, binding, mirrorBuildCall(nme.newFreeTerm, reify(sym.name.toString), binding, mirrorBuildCall(nme.flagsFromBits, reify(sym.flags)), reify(origin(sym))))
       }
     }
 

@@ -131,7 +131,7 @@ trait GenTrees {
         else if (sym.isClass && !sym.isModuleClass) {
           if (reifyDebug) println("This for %s, reified as freeVar".format(sym))
           if (reifyDebug) println("Free: " + sym)
-          mirrorBuildCall(nme.Ident, reifyFreeTerm(This(sym)))
+          mirrorBuildCall(nme.Ident, reifyFreeTerm(This(sym setFlag reflect.internal.Flags.STABLE)))
         }
         else {
           if (reifyDebug) println("This for %s, reified as This".format(sym))
